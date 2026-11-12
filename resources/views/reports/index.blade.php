@@ -7,15 +7,7 @@
     <div class="hero-banner mb-4">
         <div class="hero-bg-overlay"></div>
         <div class="hero-tooth-deco" aria-hidden="true">
-            @if (file_exists(public_path('img/tooth.png')))
-                <img src="{{ asset('img/tooth.png') }}" alt="" style="width:100%;height:auto;filter:drop-shadow(0 0 20px rgba(6,182,212,.6));">
-            @else
-            <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg" fill="none">
-                <path d="M60 8 C35 8 18 24 18 44 C18 54 22 62 24 72 C27 86 28 118 36 128 C40 133 44 130 48 120 C52 110 54 96 60 96 C66 96 68 110 72 120 C76 130 80 133 84 128 C92 118 93 86 96 72 C98 62 102 54 102 44 C102 24 85 8 60 8Z" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-                <path d="M38 26 C42 20 50 16 58 15" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linecap="round"/>
-                <ellipse cx="60" cy="96" rx="38" ry="8" fill="rgba(6,182,212,0.2)"/>
-            </svg>
-            @endif
+            <img src="{{ asset('img/denta-love-care-logo.png') }}" alt="" style="display:block;width:100%;height:auto;border-radius:20px;">
         </div>
         <div class="hero-circle-1"></div>
         <div class="hero-circle-2"></div>
