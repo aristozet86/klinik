@@ -28,7 +28,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $defaultRoute = $request->routeIs('laporan.login.store')
+            ? route('laporan.index', absolute: false)
+            : route('pelayanan.dashboard', absolute: false);
+
+        return redirect()->intended($defaultRoute);
     }
 
     /**
@@ -42,6 +46,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('laporan.login');
     }
 }

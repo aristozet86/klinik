@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.laporan')
 
 @section('content')
 <div class="container-fluid">
@@ -15,10 +15,10 @@
     <!-- Filter Card -->
     <div class="card border-0 shadow-sm rounded-3 mb-4 d-print-none">
         <div class="card-body p-4">
-            <form method="GET" action="{{ route('reports.visits') }}" class="row g-3">
+            <form method="GET" action="{{ route('laporan.kunjungan') }}" class="row g-3">
                 <div class="col-12">
                     <label for="search" class="form-label small fw-semibold text-secondary">Cari kunjungan</label>
-                    <input id="search" name="search" type="search" class="form-control" maxlength="255" value="{{ $search }}" placeholder="Nama pasien, No. RM, NIK, No. HP, dokter, antrean, keluhan, atau diagnosa">
+                    <input id="search" name="search" type="search" class="form-control" maxlength="255" value="{{ $search }}" placeholder="Nama pasien, No. RM, NIK, No. HP, keluhan, atau diagnosa">
                     <div class="form-text">Pencarian mengikuti periode dan filter yang dipilih.</div>
                 </div>
                 <div class="col-md-3">
@@ -39,20 +39,11 @@
                         <option value="Poli Anak" {{ $poli === 'Poli Anak' ? 'selected' : '' }}>Poli Anak</option>
                     </select>
                 </div>
-                <div class="col-md-2">
-                    <label class="form-label small fw-semibold text-secondary">Dokter</label>
-                    <select class="form-select" name="doctor_id">
-                        <option value="">-- Semua Dokter --</option>
-                        @foreach ($doctors as $doc)
-                            <option value="{{ $doc->id }}" {{ $doctorId == $doc->id ? 'selected' : '' }}>{{ $doc->nama }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2 d-flex align-items-end gap-2">
+                <div class="col-md-4 d-flex align-items-end gap-2">
                     <button type="submit" class="btn btn-primary w-100 fw-semibold">
                         <i class="fa-solid fa-filter me-1"></i> Filter
                     </button>
-                    <a href="{{ route('reports.visits') }}" class="btn btn-outline-secondary">Reset</a>
+                    <a href="{{ route('laporan.kunjungan') }}" class="btn btn-outline-secondary">Reset</a>
                 </div>
             </form>
         </div>
@@ -116,7 +107,6 @@
                             <th>No. RM</th>
                             <th>Nama Pasien</th>
                             <th>Poli</th>
-                            <th>Dokter Pemeriksa</th>
                             <th>Keluhan & Diagnosa</th>
                             <th>Penjamin</th>
                             <th>Status</th>
@@ -134,7 +124,6 @@
                                 <td class="fw-semibold text-primary">{{ $v->patient ? $v->patient->no_rm : '-' }}</td>
                                 <td class="fw-bold text-dark">{{ $v->patient ? $v->patient->nama : '-' }}</td>
                                 <td><span class="badge bg-light text-dark border">{{ $v->poli }}</span></td>
-                                <td>{{ $v->doctor ? $v->doctor->nama : 'Belum ditentukan' }}</td>
                                 <td>
                                     <div><strong>Diagnosa:</strong> {{ $v->diagnosa ?: '-' }}</div>
                                     <small class="text-muted">Keluhan: {{ $v->keluhan ?: '-' }}</small>
@@ -160,7 +149,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="text-center py-5 text-muted">
+                                <td colspan="9" class="text-center py-5 text-muted">
                                     Tidak ada data kunjungan pada rentang tanggal yang dipilih.
                                 </td>
                             </tr>

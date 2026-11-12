@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.pelayanan')
 
 @section('content')
 <div class="container-fluid">
@@ -12,7 +12,7 @@
     <!-- Search Box -->
     <div class="card border-0 shadow-sm rounded-3 mb-4">
         <div class="card-body py-3">
-            <form method="GET" action="{{ route('medical_records.index') }}" class="row g-2">
+            <form method="GET" action="{{ route('pelayanan.riwayat') }}" class="row g-2">
                 <div class="col-md-7">
                     <div class="input-group">
                         <span class="input-group-text bg-white"><i class="fa-solid fa-search text-muted"></i></span>
@@ -22,7 +22,7 @@
                 </div>
                 @if ($search)
                     <div class="col-md-2">
-                        <a href="{{ route('medical_records.index') }}" class="btn btn-outline-secondary">Reset</a>
+                        <a href="{{ route('pelayanan.riwayat') }}" class="btn btn-outline-secondary">Reset</a>
                     </div>
                 @endif
             </form>
@@ -72,7 +72,7 @@
                                     </span>
                                 </td>
                                 <td class="text-end pe-3">
-                                    <a href="{{ route('medical_records.show', $patient) }}" class="btn btn-primary btn-sm fw-semibold">
+                                    <a href="{{ route('pelayanan.riwayat.show', $patient) }}" class="btn btn-primary btn-sm fw-semibold">
                                         <i class="fa-solid fa-folder-open me-1"></i> Buka Rekam Medis
                                     </a>
                                 </td>

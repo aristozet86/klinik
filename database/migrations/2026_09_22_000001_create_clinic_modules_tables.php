@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('spesialisasi')->default('Dokter Umum');
             $table->string('no_sip')->nullable();
             $table->string('no_hp')->nullable();
-            $table->integer('tarif_konsultasi')->default(50000);
+            $table->integer('tarif_konsultasi')->default(0);
             $table->enum('status', ['Aktif', 'Nonaktif'])->default('Aktif');
             $table->timestamps();
         });
@@ -37,7 +37,7 @@ return new class extends Migration
         // 3. Visits (Kunjungan Pasien) Table
         Schema::create('visits', function (Blueprint $table) {
             $table->id();
-            $table->string('no_antrean');
+            $table->string('no_antrean')->nullable();
             $table->foreignId('patient_id')->constrained('patients')->cascadeOnDelete();
             $table->foreignId('doctor_id')->nullable()->constrained('doctors')->nullOnDelete();
             $table->string('poli')->default('Poli Umum'); // Poli Umum, Poli Gigi, KIA/KB, dll

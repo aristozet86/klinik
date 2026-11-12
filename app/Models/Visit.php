@@ -12,11 +12,11 @@ class Visit extends Model
     protected $fillable = [
         'no_antrean',
         'patient_id',
-        'doctor_id',
         'poli',
         'tanggal_kunjungan',
         'jam_kunjungan',
         'keluhan',
+        'pemeriksaan_awal',
         'diagnosa',
         'tensi_darah',
         'suhu_tubuh',
@@ -39,11 +39,6 @@ class Visit extends Model
     public function patient()
     {
         return $this->belongsTo(Patient::class);
-    }
-
-    public function doctor()
-    {
-        return $this->belongsTo(Doctor::class);
     }
 
     public function visitTreatments()

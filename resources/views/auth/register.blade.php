@@ -76,7 +76,7 @@
 
         <div class="text-center">
             <span class="small text-secondary">Sudah punya akun? </span>
-            <a href="{{ route('login') }}" class="small text-decoration-none text-primary fw-bold">
+            <a href="{{ route('laporan.login') }}" class="small text-decoration-none text-primary fw-bold">
                 Masuk di sini
             </a>
         </div>

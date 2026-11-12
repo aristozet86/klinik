@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.laporan')
 
 @section('content')
 <div class="container-fluid">
@@ -15,7 +15,7 @@
     <!-- Filter Bar -->
     <div class="card border-0 shadow-sm rounded-3 mb-4 d-print-none">
         <div class="card-body p-4">
-            <form method="GET" action="{{ route('reports.treatments') }}" class="row g-3">
+            <form method="GET" action="{{ route('laporan.tindakan') }}" class="row g-3">
                 <div class="col-md-4">
                     <label class="form-label small fw-semibold text-secondary">Tanggal Mulai</label>
                     <input type="date" class="form-control" name="start_date" value="{{ $startDate }}">
@@ -37,7 +37,7 @@
                     <button type="submit" class="btn btn-primary w-100 fw-semibold">
                         <i class="fa-solid fa-filter me-1"></i> Filter
                     </button>
-                    <a href="{{ route('reports.treatments') }}" class="btn btn-outline-secondary">Reset</a>
+                    <a href="{{ route('laporan.tindakan') }}" class="btn btn-outline-secondary">Reset</a>
                 </div>
             </form>
         </div>
@@ -117,7 +117,6 @@
                             <th>Tanggal</th>
                             <th>No. RM & Pasien</th>
                             <th>Tindakan Dilakukan</th>
-                            <th>Dokter Pelaksana</th>
                             <th>Catatan Medis</th>
                             <th class="text-end">Biaya</th>
                         </tr>
@@ -135,13 +134,12 @@
                                     <div class="fw-semibold text-dark">{{ $r->treatment ? $r->treatment->nama : '-' }}</div>
                                     <small class="badge bg-light text-secondary border">{{ $r->treatment ? $r->treatment->kategori : '' }}</small>
                                 </td>
-                                <td>{{ $r->visit->doctor ? $r->visit->doctor->nama : 'Belum Ditentukan' }}</td>
                                 <td class="small text-muted">{{ $r->catatan ?: '-' }}</td>
                                 <td class="text-end fw-semibold text-primary">Rp {{ number_format($r->biaya, 0, ',', '.') }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center py-4 text-muted">
+                                <td colspan="6" class="text-center py-4 text-muted">
                                     Tidak ada log pelaksanaan tindakan medis pada periode ini.
                                 </td>
                             </tr>

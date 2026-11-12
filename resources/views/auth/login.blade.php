@@ -5,10 +5,16 @@
     <!-- Header & Brand Logo -->
     <div class="text-center">
         <div class="auth-logo-badge">
-            <i class="fa-solid fa-notes-medical"></i>
+            <img src="{{ asset('img/denta-love-care-logo.png') }}" alt="Logo Denta Love Care">
         </div>
-        <h1 class="auth-title">Klinik App</h1>
-        <p class="auth-subtitle">Masuk Petugas · Laporan dan Pengelolaan Klinik</p>
+        <h1 class="auth-title">{{ config('app.name', 'Denta Love Care') }}</h1>
+        <p class="auth-subtitle">
+            @if (request()->routeIs('laporan.login'))
+                Masuk Petugas · Laporan & Analitik
+            @else
+                Masuk Petugas · Pelayanan dan Pengelolaan Klinik
+            @endif
+        </p>
     </div>
 
     <!-- Session Status Notification -->
@@ -37,7 +43,7 @@
     @endif
 
     <!-- Login Form -->
-    <form method="POST" action="{{ route('login') }}" id="loginForm">
+    <form method="POST" action="{{ route('laporan.login.store') }}" id="loginForm">
         @csrf
 
         <!-- Username / Email Field -->
@@ -112,7 +118,13 @@
         </button>
     </form>
 
-    <p class="text-center mt-4 mb-0"><a href="{{ route('registration.create') }}">Kembali ke pendaftaran pasien</a></p>
+    <p class="text-center mt-4 mb-0">
+        @if (request()->routeIs('laporan.login'))
+            <a href="{{ route('pelayanan.dashboard') }}">Kembali ke pelayanan</a>
+        @else
+            <a href="{{ route('pelayanan.dashboard') }}">Kembali ke pelayanan</a>
+        @endif
+    </p>
 </div>
 @endsection
 

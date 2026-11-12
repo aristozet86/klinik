@@ -14,7 +14,6 @@ class Doctor extends Model
         'spesialisasi',
         'no_sip',
         'no_hp',
-        'tarif_konsultasi',
         'status',
     ];
 

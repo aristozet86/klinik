@@ -34,12 +34,11 @@ class MedicalRecordController extends Controller
     public function show(Patient $patient)
     {
         $patient->load([
-            'visits.doctor',
             'visits.visitTreatments.treatment',
             'odontograms',
         ]);
 
-        $visits = $patient->visits()->with(['doctor', 'visitTreatments.treatment'])->latest('tanggal_kunjungan')->get();
+        $visits = $patient->visits()->with('visitTreatments.treatment')->latest('tanggal_kunjungan')->get();
         $odontograms = $patient->odontograms->keyBy('nomor_gigi');
 
         return view('medical_records.show', compact('patient', 'visits', 'odontograms'));

@@ -85,7 +85,7 @@ class OdontogramController extends Controller
             );
         }
 
-        return redirect()->route('odontogram.show', $patient)
+        return redirect()->route('pelayanan.odontogram.show', $patient)
             ->with('success', "Kondisi gigi nomor {$validated['nomor_gigi']} berhasil diperbarui!");
     }
 }

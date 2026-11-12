@@ -62,7 +62,7 @@
         </button>
 
         <div class="text-center">
-            <a href="{{ route('login') }}" class="small text-decoration-none text-secondary">
+            <a href="{{ route('laporan.login') }}" class="small text-decoration-none text-secondary">
                 <i class="fa-solid fa-arrow-left me-1"></i> Kembali ke Halaman Login
             </a>
         </div>

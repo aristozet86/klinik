@@ -1,0 +1,215 @@
+@extends('layouts.laporan')
+
+@section('content')
+<div class="container-fluid">
+
+    {{-- ── Hero Banner ─────────────────────────────────────── --}}
+    <div class="hero-banner mb-4">
+        <div class="hero-bg-overlay"></div>
+        <div class="hero-tooth-deco" aria-hidden="true">
+            @if (file_exists(public_path('img/tooth.png')))
+                <img src="{{ asset('img/tooth.png') }}" alt="" style="width:100%;height:auto;filter:drop-shadow(0 0 20px rgba(6,182,212,.6));">
+            @else
+            <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <path d="M60 8 C35 8 18 24 18 44 C18 54 22 62 24 72 C27 86 28 118 36 128 C40 133 44 130 48 120 C52 110 54 96 60 96 C66 96 68 110 72 120 C76 130 80 133 84 128 C92 118 93 86 96 72 C98 62 102 54 102 44 C102 24 85 8 60 8Z" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+                <path d="M38 26 C42 20 50 16 58 15" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linecap="round"/>
+                <ellipse cx="60" cy="96" rx="38" ry="8" fill="rgba(6,182,212,0.2)"/>
+            </svg>
+            @endif
+        </div>
+        <div class="hero-circle-1"></div>
+        <div class="hero-circle-2"></div>
+        <div style="position:relative;z-index:2;">
+            <div class="eyebrow">{{ now()->locale('id')->translatedFormat('l, d F Y') }}</div>
+            <h1>Dashboard Laporan<br>
+                <span style="font-weight:500;font-size:72%;opacity:.92;">Analitik & Rekapitulasi <span style="color:#67e8f9;font-size:110%;">↗</span> Klinik</span>
+            </h1>
+            <p>Data diperbarui langsung dari pendaftaran dan pelayanan.<br>Pilih laporan di bawah untuk melihat detail.</p>
+        </div>
+        <div class="hero-tagline d-none d-lg-flex" aria-hidden="true">
+            <span>Data</span>
+            <span>Terpercaya</span>
+        </div>
+    </div>
+
+    {{-- ── Metric Cards ────────────────────────────────────── --}}
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-xl-3">
+            <div class="card metric-card blue">
+                <div class="metric-icon-bg"><i class="fa-solid fa-users"></i></div>
+                <div class="metric-label">Total Pasien</div>
+                <div class="metric-value">{{ number_format($totalPatients, 0, ',', '.') }}</div>
+                <div class="metric-sub">
+                    <i class="fa-solid fa-circle-dot" style="color:rgba(255,255,255,.5);font-size:8px;"></i>
+                    <span style="color:rgba(255,255,255,.75);">Seluruh pasien terdaftar</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-xl-3">
+            <div class="card metric-card green">
+                <div class="metric-icon-bg"><i class="fa-solid fa-calendar-check"></i></div>
+                <div class="metric-label">Total Kunjungan</div>
+                <div class="metric-value">{{ number_format($totalVisits, 0, ',', '.') }}</div>
+                <div class="metric-sub">
+                    <i class="fa-solid fa-circle-dot" style="color:rgba(255,255,255,.5);font-size:8px;"></i>
+                    <span style="color:rgba(255,255,255,.75);">Semua kunjungan tercatat</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-xl-3">
+            <div class="card metric-card purple">
+                <div class="metric-icon-bg"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="metric-label">Kunjungan Bulan Ini</div>
+                <div class="metric-value">{{ number_format($visitsThisMonth, 0, ',', '.') }}</div>
+                <div class="metric-sub">
+                    <i class="fa-solid fa-arrow-trend-up up"></i>
+                    <span class="up">Dari awal bulan</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-xl-3">
+            <div class="card metric-card orange">
+                <div class="metric-icon-bg"><i class="fa-solid fa-dollar-sign"></i></div>
+                <div class="metric-label">Pendapatan Bulan Ini</div>
+                <div class="metric-value" style="font-size:clamp(14px,1.6vw,20px);">Rp {{ number_format($revenueThisMonth, 0, ',', '.') }}</div>
+                <div class="metric-sub">
+                    <i class="fa-solid fa-circle-dot" style="color:rgba(255,255,255,.5);font-size:8px;"></i>
+                    <span style="color:rgba(255,255,255,.75);">Pembayaran lunas</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ── Navigasi Laporan ──────────────────────────────────── --}}
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="section-label mb-0">Navigasi Laporan</h2>
+        <span class="text-muted" style="font-size:11px;">Pilih laporan yang ingin ditampilkan</span>
+    </div>
+
+    <div class="row g-3">
+
+        {{-- Laporan Kunjungan --}}
+        <div class="col-12 col-md-6">
+            <a href="{{ route('laporan.kunjungan') }}" class="text-decoration-none">
+                <div class="laporan-card" style="background:linear-gradient(135deg,#eff6ff,#dbeafe);">
+                    <div class="laporan-card-icon" style="background:linear-gradient(135deg,#2563eb,#3b82f6);">
+                        <i class="fa-solid fa-file-waveform"></i>
+                    </div>
+                    <div class="laporan-card-body">
+                        <div class="laporan-card-title">Laporan Kunjungan</div>
+                        <div class="laporan-card-desc">Tinjau, filter, dan cetak data kunjungan pasien per periode</div>
+                    </div>
+                    <div class="laporan-card-arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        {{-- Grafik Kunjungan --}}
+        <div class="col-12 col-md-6">
+            <a href="{{ route('laporan.grafik') }}" class="text-decoration-none">
+                <div class="laporan-card" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);">
+                    <div class="laporan-card-icon" style="background:linear-gradient(135deg,#059669,#10b981);">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div class="laporan-card-body">
+                        <div class="laporan-card-title">Grafik Kunjungan</div>
+                        <div class="laporan-card-desc">Visualisasi tren dan statistik kunjungan klinik per bulan</div>
+                    </div>
+                    <div class="laporan-card-arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        {{-- Laporan Keuangan --}}
+        <div class="col-12 col-md-6">
+            <a href="{{ route('laporan.keuangan') }}" class="text-decoration-none">
+                <div class="laporan-card" style="background:linear-gradient(135deg,#fff7ed,#ffedd5);">
+                    <div class="laporan-card-icon" style="background:linear-gradient(135deg,#d97706,#f59e0b);">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                    </div>
+                    <div class="laporan-card-body">
+                        <div class="laporan-card-title">Laporan Keuangan</div>
+                        <div class="laporan-card-desc">Pantau pendapatan, piutang, dan rekapitulasi pembayaran</div>
+                    </div>
+                    <div class="laporan-card-arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        {{-- Laporan Tindakan --}}
+        <div class="col-12 col-md-6">
+            <a href="{{ route('laporan.tindakan') }}" class="text-decoration-none">
+                <div class="laporan-card" style="background:linear-gradient(135deg,#faf5ff,#ede9fe);">
+                    <div class="laporan-card-icon" style="background:linear-gradient(135deg,#7c3aed,#a78bfa);">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                    </div>
+                    <div class="laporan-card-body">
+                        <div class="laporan-card-title">Laporan Tindakan</div>
+                        <div class="laporan-card-desc">Tinjau tindakan medis, frekuensi, dan kontribusi pendapatan</div>
+                    </div>
+                    <div class="laporan-card-arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+@push('styles')
+<style>
+    .laporan-card {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 22px 20px;
+        border-radius: 16px;
+        border: 1.5px solid rgba(0,0,0,.06);
+        transition: transform .18s, box-shadow .18s, border-color .18s;
+    }
+    .laporan-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 28px rgba(10,45,110,.12);
+        border-color: rgba(37,99,235,.25);
+    }
+    .laporan-card-icon {
+        width: 52px; height: 52px;
+        border-radius: 14px;
+        display: grid; place-items: center;
+        font-size: 20px; color: white;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    }
+    .laporan-card-body { flex: 1; min-width: 0; }
+    .laporan-card-title {
+        font-size: 14px; font-weight: 700;
+        color: #0f172a; margin-bottom: 4px;
+    }
+    .laporan-card-desc {
+        font-size: 12px; color: #64748b; line-height: 1.5;
+    }
+    .laporan-card-arrow {
+        width: 32px; height: 32px;
+        border-radius: 50%;
+        background: rgba(0,0,0,.07);
+        display: grid; place-items: center;
+        font-size: 12px; color: #64748b;
+        flex-shrink: 0;
+        transition: background .15s, color .15s;
+    }
+    .laporan-card:hover .laporan-card-arrow {
+        background: #2563eb;
+        color: white;
+    }
+</style>
+@endpush
+
+@endsection

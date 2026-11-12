@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Doctor;
+use App\Models\Patient;
 use App\Models\Treatment;
 use App\Models\Visit;
 use App\Models\VisitTreatment;
@@ -12,6 +12,21 @@ use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
+    public function index()
+    {
+        $monthStart = now()->startOfMonth()->toDateString();
+        $today = now()->toDateString();
+
+        $totalPatients = Patient::count();
+        $totalVisits = Visit::count();
+        $visitsThisMonth = Visit::whereBetween('tanggal_kunjungan', [$monthStart, $today])->count();
+        $revenueThisMonth = Visit::whereBetween('tanggal_kunjungan', [$monthStart, $today])
+            ->where('status_pembayaran', 'Lunas')
+            ->sum('total_biaya');
+
+        return view('reports.index', compact('totalPatients', 'totalVisits', 'visitsThisMonth', 'revenueThisMonth'));
+    }
+
     /**
      * Laporan Kunjungan
      */
@@ -22,20 +37,18 @@ class ReportController extends Controller
         $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
         $endDate = $request->input('end_date', now()->toDateString());
         $poli = $request->input('poli');
-        $doctorId = $request->input('doctor_id');
         $penjamin = $request->input('penjamin');
         $status = $request->input('status');
 
-        $query = Visit::with(['patient', 'doctor', 'visitTreatments'])
+        $query = Visit::with(['patient', 'visitTreatments'])
             ->whereDate('tanggal_kunjungan', '>=', $startDate)
             ->whereDate('tanggal_kunjungan', '<=', $endDate)
-            ->orderBy('tanggal_kunjungan', 'desc');
+            ->orderBy('tanggal_kunjungan', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc');
 
         if ($poli) {
             $query->where('poli', $poli);
-        }
-        if ($doctorId) {
-            $query->where('doctor_id', $doctorId);
         }
         if ($penjamin) {
             $query->where('penjamin', $penjamin);
@@ -50,9 +63,7 @@ class ReportController extends Controller
                 $q->whereHas('patient', function ($patient) use ($term) {
                     $patient->where('nama', 'like', $term)->orWhere('no_rm', 'like', $term)
                         ->orWhere('nik', 'like', $term)->orWhere('no_hp', 'like', $term);
-                })->orWhereHas('doctor', fn ($doctor) => $doctor->where('nama', 'like', $term))
-                    ->orWhere('no_antrean', 'like', $term)
-                    ->orWhere('keluhan', 'like', $term)->orWhere('diagnosa', 'like', $term);
+                })->orWhere('keluhan', 'like', $term)->orWhere('diagnosa', 'like', $term);
             });
         }
 
@@ -64,11 +75,9 @@ class ReportController extends Controller
         $totalBpjs = $visits->where('penjamin', 'BPJS')->count();
         $totalUmum = $visits->where('penjamin', 'Umum')->count();
 
-        $doctors = Doctor::orderBy('nama')->get();
-
         return view('reports.visits', compact(
-            'visits', 'startDate', 'endDate', 'poli', 'doctorId', 'penjamin', 'status',
-            'totalVisits', 'totalSelesai', 'totalBpjs', 'totalUmum', 'doctors', 'search'
+            'visits', 'startDate', 'endDate', 'poli', 'penjamin', 'status',
+            'totalVisits', 'totalSelesai', 'totalBpjs', 'totalUmum', 'search'
         ));
     }
 
@@ -105,14 +114,6 @@ class ReportController extends Controller
             ->groupBy('poli')->orderBy('poli')->pluck('count', 'poli')->toArray();
         $penjaminVisits = (clone $yearQuery)->select('penjamin', DB::raw('count(*) as count'))
             ->groupBy('penjamin')->orderBy('penjamin')->pluck('count', 'penjamin')->toArray();
-        $doctorVisits = (clone $yearQuery)->with('doctor')
-            ->select('doctor_id', DB::raw('count(*) as count'))->groupBy('doctor_id')->orderBy('doctor_id')->get()
-            ->mapWithKeys(function ($item) {
-                $label = $item->doctor ? $item->doctor->nama.' (#'.$item->doctor_id.')' : 'Belum ditentukan';
-
-                return [$label => (int) $item->count];
-            })->toArray();
-
         // The operational daily chart always shows the current seven days, independently of the annual filter.
         $today = CarbonImmutable::today();
         $dailyCounts = Visit::where('tanggal_kunjungan', '>=', $today->subDays(6)->toDateString())
@@ -129,7 +130,7 @@ class ReportController extends Controller
 
         return view('reports.charts', compact(
             'year', 'monthsLabels', 'monthlyData',
-            'poliVisits', 'penjaminVisits', 'doctorVisits',
+            'poliVisits', 'penjaminVisits',
             'dailyLabels', 'dailyTrend'
         ));
     }
@@ -144,7 +145,7 @@ class ReportController extends Controller
         $statusPembayaran = $request->input('status_pembayaran');
         $metodePembayaran = $request->input('metode_pembayaran');
 
-        $query = Visit::with(['patient', 'doctor'])
+        $query = Visit::with('patient')
             ->whereBetween('tanggal_kunjungan', [$startDate, $endDate])
             ->orderBy('tanggal_kunjungan', 'desc');
 
@@ -159,14 +160,13 @@ class ReportController extends Controller
 
         // Totals
         $totalPendapatan = $visits->where('status_pembayaran', 'Lunas')->sum('total_biaya');
-        $totalKonsultasi = $visits->where('status_pembayaran', 'Lunas')->sum('biaya_konsultasi');
         $totalTindakan = $visits->where('status_pembayaran', 'Lunas')->sum('biaya_tindakan');
         $totalObat = $visits->where('status_pembayaran', 'Lunas')->sum('biaya_obat');
         $totalPiutang = $visits->where('status_pembayaran', 'Belum Lunas')->sum('total_biaya');
 
         return view('reports.finance', compact(
             'visits', 'startDate', 'endDate', 'statusPembayaran', 'metodePembayaran',
-            'totalPendapatan', 'totalKonsultasi', 'totalTindakan', 'totalObat', 'totalPiutang'
+            'totalPendapatan', 'totalTindakan', 'totalObat', 'totalPiutang'
         ));
     }
 
@@ -179,7 +179,7 @@ class ReportController extends Controller
         $endDate = $request->input('end_date', now()->toDateString());
         $kategori = $request->input('kategori');
 
-        $query = VisitTreatment::with(['treatment', 'visit.patient', 'visit.doctor'])
+        $query = VisitTreatment::with(['treatment', 'visit.patient'])
             ->whereHas('visit', function ($q) use ($startDate, $endDate) {
                 $q->whereBetween('tanggal_kunjungan', [$startDate, $endDate]);
             });
@@ -213,47 +213,4 @@ class ReportController extends Controller
         ));
     }
 
-    /**
-     * Laporan Kinerja Dokter
-     */
-    public function doctors(Request $request)
-    {
-        $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
-        $endDate = $request->input('end_date', now()->toDateString());
-
-        $doctors = Doctor::with(['visits' => function ($q) use ($startDate, $endDate) {
-            $q->whereBetween('tanggal_kunjungan', [$startDate, $endDate]);
-        }, 'visits.visitTreatments'])->get();
-
-        $doctorStats = $doctors->map(function ($doctor) {
-            $visits = $doctor->visits;
-            $totalPasien = $visits->count();
-            $pasienSelesai = $visits->where('status', 'Selesai')->count();
-            $totalKonsultasi = $visits->sum('biaya_konsultasi');
-
-            $totalTindakanCount = 0;
-            $totalBiayaTindakan = 0;
-            foreach ($visits as $v) {
-                $totalTindakanCount += $v->visitTreatments->count();
-                $totalBiayaTindakan += $v->visitTreatments->sum('biaya');
-            }
-
-            $totalPendapatan = $totalKonsultasi + $totalBiayaTindakan;
-
-            return [
-                'id' => $doctor->id,
-                'nama' => $doctor->nama,
-                'spesialisasi' => $doctor->spesialisasi,
-                'no_sip' => $doctor->no_sip,
-                'total_pasien' => $totalPasien,
-                'pasien_selesai' => $pasienSelesai,
-                'total_tindakan' => $totalTindakanCount,
-                'total_konsultasi' => $totalKonsultasi,
-                'total_tindakan_rp' => $totalBiayaTindakan,
-                'total_pendapatan' => $totalPendapatan,
-            ];
-        });
-
-        return view('reports.doctors', compact('doctorStats', 'startDate', 'endDate'));
-    }
 }

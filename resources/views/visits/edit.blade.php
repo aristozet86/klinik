@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.pelayanan')
 
 @section('content')
 <div class="container-fluid">
@@ -7,7 +7,7 @@
             <h3 class="fw-bold mb-1"><i class="fa-solid fa-user-doctor text-primary me-2"></i>Pemeriksaan & Rekam Medis Kunjungan</h3>
             <p class="text-muted mb-0">Pasien: <strong>{{ $visit->patient->nama }}</strong> ({{ $visit->patient->no_rm }}) &bull; No. Antrean: <span class="badge bg-primary">{{ $visit->no_antrean }}</span></p>
         </div>
-        <a href="{{ route('visits.show', $visit) }}" class="btn btn-outline-secondary">
+        <a href="{{ route('pelayanan.kunjungan.show', $visit) }}" class="btn btn-outline-secondary">
             <i class="fa-solid fa-arrow-left me-1"></i> Kembali ke Detail
         </a>
     </div>
@@ -23,7 +23,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('visits.update', $visit) }}">
+    <form method="POST" action="{{ route('pelayanan.kunjungan.update', $visit) }}">
         @csrf
         @method('PUT')
 
@@ -76,6 +76,13 @@
                             <label class="form-label fw-semibold">Keluhan Pasien (Anamnesis Awal):</label>
                             <div class="p-3 bg-light rounded-3 text-muted">{{ $visit->keluhan ?: 'Tidak ada keluhan tertulis.' }}</div>
                         </div>
+
+                        @if ($visit->pemeriksaan_awal)
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Informasi Pemeriksaan Awal dari Pasien:</label>
+                                <div class="p-3 bg-light rounded-3 text-muted">{{ $visit->pemeriksaan_awal }}</div>
+                            </div>
+                        @endif
 
                         <div class="mb-3">
                             <label for="diagnosa" class="form-label fw-semibold">Diagnosa Klinis Dokter <span class="text-danger">*</span></label>
@@ -197,7 +204,7 @@
                     <button type="submit" class="btn btn-primary py-2 fw-semibold shadow-sm">
                         <i class="fa-solid fa-save me-1"></i> Simpan Pemeriksaan Medis
                     </button>
-                    <a href="{{ route('visits.show', $visit) }}" class="btn btn-light py-2">Batal</a>
+                    <a href="{{ route('pelayanan.kunjungan.show', $visit) }}" class="btn btn-light py-2">Batal</a>
                 </div>
             </div>
         </div>

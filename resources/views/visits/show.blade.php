@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.pelayanan')
 
 @section('content')
 <div class="container-fluid">
@@ -11,10 +11,10 @@
             <button onclick="window.print()" class="btn btn-outline-secondary">
                 <i class="fa-solid fa-print me-1"></i> Cetak Resume
             </button>
-            <a href="{{ route('visits.edit', $visit) }}" class="btn btn-warning fw-semibold">
+            <a href="{{ route('pelayanan.kunjungan.edit', $visit) }}" class="btn btn-warning fw-semibold">
                 <i class="fa-solid fa-user-doctor me-1"></i> Periksa / Input Medis
             </a>
-            <a href="{{ route('visits.index') }}" class="btn btn-outline-primary">
+            <a href="{{ route('pelayanan.kunjungan') }}" class="btn btn-outline-primary">
                 <i class="fa-solid fa-arrow-left me-1"></i> Kembali
             </a>
         </div>
@@ -162,6 +162,13 @@
                         <label class="text-muted small fw-bold">Keluhan Pasien:</label>
                         <div class="p-3 bg-light rounded-3">{{ $visit->keluhan ?: 'Tidak ada catatan keluhan.' }}</div>
                     </div>
+
+                    @if ($visit->pemeriksaan_awal)
+                        <div class="mb-3">
+                            <label class="text-muted small fw-bold">Informasi Pemeriksaan Awal dari Pasien:</label>
+                            <div class="p-3 bg-light rounded-3">{{ $visit->pemeriksaan_awal }}</div>
+                        </div>
+                    @endif
 
                     <div class="mb-3">
                         <label class="text-muted small fw-bold">Diagnosa Medis:</label>

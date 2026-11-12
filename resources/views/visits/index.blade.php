@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.pelayanan')
 
 @section('content')
 <div class="container-fluid">
@@ -7,9 +7,6 @@
             <h3 class="fw-bold mb-1"><i class="fa-solid fa-calendar-check text-primary me-2"></i>Kunjungan & Antrean Pasien</h3>
             <p class="text-muted mb-0">Kelola registrasi kunjungan, antrean poliklinik, dan pelayanan medis</p>
         </div>
-        <a href="{{ route('visits.create') }}" class="btn btn-primary px-3 shadow-sm fw-semibold">
-            <i class="fa-solid fa-plus me-1"></i> Daftarkan Kunjungan Baru
-        </a>
     </div>
 
     @if (session('success'))
@@ -78,7 +75,7 @@
     <!-- Filter Bar -->
     <div class="card border-0 shadow-sm rounded-3 mb-4">
         <div class="card-body py-3">
-            <form method="GET" action="{{ route('visits.index') }}" class="row g-2 align-items-end">
+            <form method="GET" action="{{ route('pelayanan.kunjungan') }}" class="row g-2 align-items-end">
                 <div class="col-md-3">
                     <label class="form-label small fw-semibold text-secondary">Tanggal Kunjungan</label>
                     <input type="date" class="form-control form-control-sm" name="tanggal" value="{{ $date }}">
@@ -101,7 +98,7 @@
                     </div>
                 </div>
                 <div class="col-md-2 d-flex gap-1">
-                    <a href="{{ route('visits.index') }}" class="btn btn-sm btn-outline-secondary w-100">
+                    <a href="{{ route('pelayanan.kunjungan') }}" class="btn btn-sm btn-outline-secondary w-100">
                         <i class="fa-solid fa-rotate-left"></i> Reset
                     </a>
                 </div>
@@ -186,13 +183,13 @@
                                 </td>
                                 <td class="text-end pe-3">
                                     <div class="btn-group btn-group-sm">
-                                        <a href="{{ route('visits.show', $visit) }}" class="btn btn-outline-info" title="Detail Kunjungan">
+                                        <a href="{{ route('pelayanan.kunjungan.show', $visit) }}" class="btn btn-outline-info" title="Detail Kunjungan">
                                             <i class="fa-solid fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('visits.edit', $visit) }}" class="btn btn-outline-primary" title="Periksa / Edit Medis">
+                                        <a href="{{ route('pelayanan.kunjungan.edit', $visit) }}" class="btn btn-outline-primary" title="Periksa / Edit Medis">
                                             <i class="fa-solid fa-user-doctor"></i> Periksa
                                         </a>
-                                        <form action="{{ route('visits.destroy', $visit) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus kunjungan antrean ini?')">
+                                        <form action="{{ route('pelayanan.kunjungan.destroy', $visit) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus kunjungan antrean ini?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-outline-danger" title="Hapus">

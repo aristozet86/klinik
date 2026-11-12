@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.pelayanan')
 
 @section('content')
 <div class="container">
@@ -16,8 +16,8 @@
                 <tr><th>Penjamin</th><td>{{ $patient->penjamin ?? '-' }}</td></tr>
                 <tr><th>Alergi</th><td>{{ $patient->alergi ?? '-' }}</td></tr>
             </table>
-            <a href="{{ route('patients.index') }}" class="btn btn-secondary">Kembali</a>
-            <a href="{{ route('patients.edit', $patient) }}" class="btn btn-warning">Edit</a>
+            <a href="{{ route('pelayanan.pasien') }}" class="btn btn-secondary">Kembali</a>
+            <a href="{{ route('pelayanan.pasien.edit', $patient) }}" class="btn btn-warning">Edit</a>
         </div>
     </div>
 </div>

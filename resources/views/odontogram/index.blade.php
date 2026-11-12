@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.pelayanan')
 
 @section('content')
 <div class="container-fluid">
@@ -12,7 +12,7 @@
     <!-- Search Bar -->
     <div class="card border-0 shadow-sm rounded-3 mb-4">
         <div class="card-body py-3">
-            <form method="GET" action="{{ route('odontogram.index') }}" class="row g-2">
+            <form method="GET" action="{{ route('pelayanan.odontogram') }}" class="row g-2">
                 <div class="col-md-6">
                     <div class="input-group">
                         <span class="input-group-text bg-white"><i class="fa-solid fa-search text-muted"></i></span>
@@ -22,7 +22,7 @@
                 </div>
                 @if ($search)
                     <div class="col-md-2">
-                        <a href="{{ route('odontogram.index') }}" class="btn btn-outline-secondary">Reset</a>
+                        <a href="{{ route('pelayanan.odontogram') }}" class="btn btn-outline-secondary">Reset</a>
                     </div>
                 @endif
             </form>
@@ -56,7 +56,7 @@
                             </div>
                         </div>
 
-                        <a href="{{ route('odontogram.show', $patient) }}" class="btn btn-outline-primary btn-sm w-100 fw-semibold">
+                        <a href="{{ route('pelayanan.odontogram.show', $patient) }}" class="btn btn-outline-primary btn-sm w-100 fw-semibold">
                             <i class="fa-solid fa-chart-simple me-1"></i> Buka Peta Odontogram
                         </a>
                     </div>

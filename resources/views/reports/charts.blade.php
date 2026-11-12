@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.laporan')
 
 @section('content')
 <div class="container-fluid">
@@ -7,7 +7,7 @@
             <h3 class="fw-bold mb-1"><i class="fa-solid fa-chart-line text-primary me-2"></i>Grafik & Analitik Kunjungan Pasien</h3>
             <p class="text-muted mb-0">Grafik bulanan dan sebaran layanan mengikuti tahun {{ $year }}. Angka menunjukkan jumlah kunjungan, termasuk kunjungan batal.</p>
         </div>
-        <form method="GET" action="{{ route('reports.charts') }}" class="d-flex align-items-center gap-2">
+        <form method="GET" action="{{ route('laporan.grafik') }}" class="d-flex align-items-center gap-2">
             <label class="small text-muted fw-semibold mb-0">Tahun:</label>
             <select aria-label="Tahun laporan" name="year" class="form-select form-select-sm" onchange="this.form.submit()">
                 @if ($year < now()->year - 4)
@@ -67,7 +67,7 @@
     <!-- Secondary Charts Row -->
     <div class="row g-4">
         <!-- Polyclinic Distribution -->
-        <div class="col-lg-4">
+        <div class="col-lg-6">
             <div class="card border-0 shadow-sm rounded-3 h-100">
                 <div class="card-header bg-white py-3 border-bottom">
                     <h6 class="card-title mb-0 fw-bold text-dark">
@@ -83,7 +83,7 @@
         </div>
 
         <!-- Penjamin (BPJS vs Umum) -->
-        <div class="col-lg-4">
+        <div class="col-lg-6">
             <div class="card border-0 shadow-sm rounded-3 h-100">
                 <div class="card-header bg-white py-3 border-bottom">
                     <h6 class="card-title mb-0 fw-bold text-dark">
@@ -98,21 +98,6 @@
             </div>
         </div>
 
-        <!-- Doctor Visits Workload -->
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm rounded-3 h-100">
-                <div class="card-header bg-white py-3 border-bottom">
-                    <h6 class="card-title mb-0 fw-bold text-dark">
-                        <i class="fa-solid fa-user-doctor text-primary me-2"></i>Volume Pelayanan Dokter
-                    </h6>
-                </div>
-                <div class="card-body p-4 d-flex align-items-center justify-content-center">
-                    <div style="position: relative; width: 100%; height: 260px;">
-                        <canvas id="doctorChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -228,29 +213,6 @@
             }
         });
 
-        // 5. Doctor Workload Horizontal Bar Chart
-        const doctorData = {{ Illuminate\Support\Js::from($doctorVisits) }};
-        new Chart(document.getElementById('doctorChart'), {
-            type: 'bar',
-            data: {
-                labels: Object.keys(doctorData),
-                datasets: [{
-                    label: 'Jumlah Kunjungan',
-                    data: Object.values(doctorData),
-                    backgroundColor: '#3b82f6',
-                    borderRadius: 4,
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { beginAtZero: true, ticks: { stepSize: 1 } }
-                }
-            }
-        });
     });
 </script>
 @endsection

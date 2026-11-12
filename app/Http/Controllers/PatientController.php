@@ -49,7 +49,7 @@ class PatientController extends Controller
             'golongan_darah', 'agama', 'penjamin', 'no_penjamin', 'alergi',
         ]));
 
-        return redirect()->route('patients.index')
+        return redirect()->route('pelayanan.pasien')
             ->with('success', 'Data pasien berhasil diperbarui.');
     }
 
@@ -57,7 +57,7 @@ class PatientController extends Controller
     {
         $patient->delete();
 
-        return redirect()->route('patients.index')
+        return redirect()->route('pelayanan.pasien')
             ->with('success', 'Data pasien berhasil dihapus.');
     }
 }

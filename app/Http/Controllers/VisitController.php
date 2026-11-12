@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Doctor;
-use App\Models\Patient;
 use App\Models\Treatment;
 use App\Models\Visit;
 use App\Models\VisitTreatment;
-use App\Services\RegistrationNumber;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class VisitController extends Controller
 {
@@ -19,7 +15,7 @@ class VisitController extends Controller
         $status = $request->input('status');
         $search = $request->input('search');
 
-        $query = Visit::with(['patient', 'doctor', 'visitTreatments'])
+        $query = Visit::with(['patient', 'visitTreatments'])
             ->orderBy('created_at', 'desc');
 
         if ($date) {
@@ -52,73 +48,50 @@ class VisitController extends Controller
         ));
     }
 
-    public function create()
+    public function examinations(Request $request)
     {
-        $patients = Patient::orderBy('nama')->get();
-        $doctors = Doctor::where('status', 'Aktif')->orderBy('nama')->get();
+        $date = $request->input('tanggal', now()->toDateString());
+        $search = $request->input('search');
 
-        // Generate next queue number
-        $todayCount = Visit::whereDate('tanggal_kunjungan', now()->toDateString())->count();
-        $nextQueue = 'A-'.str_pad($todayCount + 1, 3, '0', STR_PAD_LEFT);
+        $query = Visit::with('patient')
+            ->whereIn('status', ['Menunggu', 'Sedang Diperiksa'])
+            ->orderByRaw("CASE WHEN status = 'Sedang Diperiksa' THEN 0 ELSE 1 END")
+            ->orderBy('created_at');
 
-        return view('visits.create', compact('patients', 'doctors', 'nextQueue'));
-    }
+        if ($date) {
+            $query->whereDate('tanggal_kunjungan', $date);
+        }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'patient_id' => 'required|exists:patients,id',
-            'doctor_id' => 'nullable|exists:doctors,id',
-            'poli' => 'required|string',
-            'penjamin' => 'required|string',
-            'keluhan' => 'nullable|string',
-        ]);
+        if ($search) {
+            $query->whereHas('patient', function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                    ->orWhere('no_rm', 'like', "%{$search}%");
+            });
+        }
 
-        $doctor = Doctor::find($request->doctor_id);
-        $biayaKonsultasi = $doctor ? $doctor->tarif_konsultasi : 50000;
+        $visits = $query->paginate(15)->withQueryString();
 
-        DB::transaction(function () use ($validated, $biayaKonsultasi) {
-            $date = now('Asia/Jakarta');
-            Visit::create([
-                'no_antrean' => app(RegistrationNumber::class)->next('visit', $date->toDateString()),
-                'patient_id' => $validated['patient_id'],
-                'doctor_id' => $validated['doctor_id'] ?? null,
-                'poli' => $validated['poli'],
-                'tanggal_kunjungan' => $date->toDateString(),
-                'jam_kunjungan' => $date->format('H:i'),
-                'penjamin' => $validated['penjamin'],
-                'keluhan' => $validated['keluhan'] ?? null,
-                'status' => 'Menunggu',
-                'biaya_konsultasi' => $biayaKonsultasi,
-                'total_biaya' => $biayaKonsultasi,
-                'status_pembayaran' => 'Belum Lunas',
-            ]);
-
-        }, 3);
-
-        return redirect()->route('visits.index')->with('success', 'Pendaftaran kunjungan berhasil dibuat!');
+        return view('visits.examinations', compact('visits', 'date', 'search'));
     }
 
     public function show(Visit $visit)
     {
-        $visit->load(['patient', 'doctor', 'visitTreatments.treatment']);
+        $visit->load(['patient', 'visitTreatments.treatment']);
 
         return view('visits.show', compact('visit'));
     }
 
     public function edit(Visit $visit)
     {
-        $visit->load(['patient', 'doctor', 'visitTreatments.treatment']);
-        $doctors = Doctor::where('status', 'Aktif')->orderBy('nama')->get();
+        $visit->load(['patient', 'visitTreatments.treatment']);
         $treatments = Treatment::orderBy('nama')->get();
 
-        return view('visits.edit', compact('visit', 'doctors', 'treatments'));
+        return view('visits.edit', compact('visit', 'treatments'));
     }
 
     public function update(Request $request, Visit $visit)
     {
         $validated = $request->validate([
-            'doctor_id' => 'nullable|exists:doctors,id',
             'status' => 'required|in:Menunggu,Sedang Diperiksa,Selesai,Batal',
             'diagnosa' => 'nullable|string',
             'tensi_darah' => 'nullable|string',
@@ -158,7 +131,6 @@ class VisitController extends Controller
         $totalBiaya = $biayaKonsultasi + $biayaTindakan + $biayaObat;
 
         $visit->update([
-            'doctor_id' => $validated['doctor_id'] ?? $visit->doctor_id,
             'status' => $validated['status'],
             'diagnosa' => $validated['diagnosa'] ?? $visit->diagnosa,
             'tensi_darah' => $validated['tensi_darah'] ?? $visit->tensi_darah,
@@ -173,13 +145,13 @@ class VisitController extends Controller
             'metode_pembayaran' => $validated['metode_pembayaran'] ?? $visit->metode_pembayaran,
         ]);
 
-        return redirect()->route('visits.show', $visit)->with('success', 'Data pemeriksaan kunjungan berhasil disimpan!');
+        return redirect()->route('pelayanan.kunjungan.show', $visit)->with('success', 'Data pemeriksaan kunjungan berhasil disimpan!');
     }
 
     public function destroy(Visit $visit)
     {
         $visit->delete();
 
-        return redirect()->route('visits.index')->with('success', 'Kunjungan berhasil dihapus.');
+        return redirect()->route('pelayanan.kunjungan')->with('success', 'Kunjungan berhasil dihapus.');
     }
 }

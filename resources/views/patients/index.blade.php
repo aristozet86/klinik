@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.pelayanan')
 
 @section('content')
 <div class="container-fluid">
@@ -34,9 +34,9 @@
                             <td>{{ $patient->no_hp ?? '-' }}</td>
                             <td>{{ $patient->penjamin ?? '-' }}</td>
                             <td>
-                                <a href="{{ route('patients.show', $patient) }}" class="btn btn-sm btn-info">Detail</a>
-                                <a href="{{ route('patients.edit', $patient) }}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{ route('patients.destroy', $patient) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus?')">
+                                <a href="{{ route('pelayanan.pasien.show', $patient) }}" class="btn btn-sm btn-info">Detail</a>
+                                <a href="{{ route('pelayanan.pasien.edit', $patient) }}" class="btn btn-sm btn-warning">Edit</a>
+                                <form action="{{ route('pelayanan.pasien.destroy', $patient) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus?')">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-sm btn-danger">Hapus</button>

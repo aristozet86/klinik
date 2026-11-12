@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.pelayanan')
 
 @section('content')
 <div class="container-fluid">
@@ -11,7 +11,7 @@
             <button onclick="window.print()" class="btn btn-outline-secondary">
                 <i class="fa-solid fa-print me-1"></i> Cetak Odontogram
             </button>
-            <a href="{{ route('odontogram.index') }}" class="btn btn-outline-primary">
+            <a href="{{ route('pelayanan.odontogram') }}" class="btn btn-outline-primary">
                 <i class="fa-solid fa-arrow-left me-1"></i> Pilih Pasien Lain
             </a>
         </div>
@@ -231,7 +231,7 @@
                     </h6>
                 </div>
                 <div class="card-body p-4">
-                    <form method="POST" action="{{ route('odontogram.update_tooth', $patient) }}" id="toothForm">
+                    <form method="POST" action="{{ route('pelayanan.odontogram.update_tooth', $patient) }}" id="toothForm">
                         @csrf
 
                         <div class="mb-3">

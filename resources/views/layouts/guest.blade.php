@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Klinik App') }} - Masuk ke Sistem</title>
+    <title>{{ config('app.name', 'Denta Love Care') }} - Masuk ke Sistem</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/denta-love-care-logo.png') }}">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -72,17 +73,21 @@
         }
 
         .auth-logo-badge {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, #2563eb, #0ea5e9);
-            border-radius: 18px;
+            width: 96px;
+            height: 96px;
+            background: transparent;
+            border-radius: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 16px auto;
-            color: #ffffff;
-            font-size: 28px;
-            box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
+            box-shadow: none;
+        }
+
+        .auth-logo-badge img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .auth-title {
@@ -246,7 +251,7 @@
         @yield('content')
 
         <div class="auth-footer-text">
-            &copy; {{ date('Y') }} <strong>{{ config('app.name', 'Klinik App') }}</strong> &bull; Sistem Informasi Layanan Medis
+            &copy; {{ date('Y') }} <strong>{{ config('app.name', 'Denta Love Care') }}</strong> &bull; Sistem Informasi Layanan Medis
         </div>
     </div>
 
