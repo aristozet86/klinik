@@ -578,16 +578,14 @@
                 </div>
                 @endauth
 
-                {{-- Switch ruang --}}
-                @if (request()->routeIs('laporan.*'))
-                    <a href="{{ route('pelayanan.dashboard') }}" class="btn btn-sm btn-outline-primary d-none d-md-flex align-items-center gap-1">
-                        <i class="fa-solid fa-house-medical"></i> Pelayanan
-                    </a>
-                @elseif (auth()->check())
-                    <a href="{{ route('laporan.index') }}" class="btn btn-sm btn-outline-primary d-none d-md-flex align-items-center gap-1">
-                        <i class="fa-solid fa-chart-line"></i> Laporan
-                    </a>
-                @endif
+                {{-- Switch ruang: hanya tampil kalau sudah login --}}
+                @auth
+                    @if (!request()->routeIs('laporan.*'))
+                        <a href="{{ route('laporan.index') }}" class="btn btn-sm btn-outline-primary d-none d-md-flex align-items-center gap-1">
+                            <i class="fa-solid fa-chart-line"></i> Laporan
+                        </a>
+                    @endif
+                @endauth
 
                 {{-- User dropdown --}}
                 @auth

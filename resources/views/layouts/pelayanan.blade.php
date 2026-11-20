@@ -47,13 +47,18 @@
         Rekam Medis
     </a>
 
-    @auth
-        <div class="nav-caption" style="margin-top:8px;">Laporan</div>
+    <div class="nav-caption" style="margin-top:8px;">Laporan & Analitik</div>
 
+    @auth
         <a href="{{ route('laporan.index') }}"
            class="{{ request()->routeIs('laporan.*') ? 'active' : '' }}">
             <span class="nav-icon"><i class="fa-solid fa-chart-pie"></i></span>
             Laporan
+        </a>
+    @else
+        <a href="{{ route('laporan.login') }}">
+            <span class="nav-icon"><i class="fa-solid fa-right-to-bracket"></i></span>
+            Masuk ke Laporan
         </a>
     @endauth
 @endsection

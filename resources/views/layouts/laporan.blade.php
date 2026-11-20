@@ -6,7 +6,7 @@
     <div class="nav-caption">Pelayanan</div>
 
     <a href="{{ route('pelayanan.dashboard') }}">
-        <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+        <span class="nav-icon"><i class="fa-solid fa-house-medical"></i></span>
         Ruang Pelayanan
     </a>
 

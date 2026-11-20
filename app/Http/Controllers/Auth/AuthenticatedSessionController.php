@@ -25,14 +25,16 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
-        $defaultRoute = $request->routeIs('laporan.login.store')
-            ? route('laporan.index', absolute: false)
-            : route('pelayanan.dashboard', absolute: false);
+        // Kalau login dari halaman laporan, redirect ke laporan
+        // Kalau dari tempat lain, redirect ke intended atau pelayanan
+        $intended = redirect()->getIntendedUrl();
+        if ($intended && str_contains($intended, '/laporan')) {
+            return redirect()->intended(route('laporan.index'));
+        }
 
-        return redirect()->intended($defaultRoute);
+        return redirect()->intended(route('laporan.index'));
     }
 
     /**
@@ -46,6 +48,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('laporan.login');
+        return redirect()->route('login');
     }
 }
