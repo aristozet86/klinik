@@ -34,46 +34,35 @@
     {{-- ── Metric Cards ────────────────────────────────────── --}}
     <div class="row g-3 mb-4">
         <div class="col-6 col-xl-3">
-            <div class="card metric-card blue">
+            <div class="card metric-card green">
                 <div class="metric-icon-bg"><i class="fa-solid fa-users"></i></div>
                 <div class="metric-label">Total Pasien</div>
                 <div class="metric-value">{{ number_format($totalPasien, 0, ',', '.') }}</div>
-                <div class="metric-sub">
-                    <i class="fa-solid fa-arrow-trend-up up"></i>
-                    <span class="up">Seluruh pasien terdaftar</span>
-                </div>
+                <div class="metric-sub"><i class="fa-solid fa-arrow-trend-up up"></i><span class="up">Seluruh pasien terdaftar</span></div>
             </div>
         </div>
         <div class="col-6 col-xl-3">
-            <div class="card metric-card green">
+            <div class="card metric-card teal">
                 <div class="metric-icon-bg"><i class="fa-solid fa-calendar-check"></i></div>
                 <div class="metric-label">Janji Temu Hari Ini</div>
                 <div class="metric-value">{{ $kunjunganHariIni }}</div>
-                <div class="metric-sub">
-                    <i class="fa-solid fa-arrow-trend-up up"></i>
-                    <span class="up">Kunjungan hari ini</span>
-                </div>
+                <div class="metric-sub"><i class="fa-solid fa-arrow-trend-up up"></i><span class="up">Kunjungan hari ini</span></div>
             </div>
         </div>
         <div class="col-6 col-xl-3">
-            <div class="card metric-card purple">
+            <div class="card metric-card emerald">
                 <div class="metric-icon-bg"><i class="fa-solid fa-stethoscope"></i></div>
                 <div class="metric-label">Menunggu Pemeriksaan</div>
                 <div class="metric-value">{{ $menungguPemeriksaan }}</div>
-                <div class="metric-sub">
-                    <span style="color:rgba(255,255,255,.75);">Antrian aktif hari ini</span>
-                </div>
+                <div class="metric-sub"><span style="color:rgba(255,255,255,.75);">Antrian aktif hari ini</span></div>
             </div>
         </div>
         <div class="col-6 col-xl-3">
-            <div class="card metric-card orange">
+            <div class="card metric-card sage">
                 <div class="metric-icon-bg"><i class="fa-solid fa-dollar-sign"></i></div>
                 <div class="metric-label">Pendapatan Hari Ini</div>
-                <div class="metric-value" style="font-size:clamp(16px,1.8vw,22px);">Rp {{ number_format($pendapatanHariIni, 0, ',', '.') }}</div>
-                <div class="metric-sub">
-                    <i class="fa-solid fa-arrow-trend-up up"></i>
-                    <span class="up">Pembayaran lunas</span>
-                </div>
+                <div class="metric-value" style="font-size:clamp(15px,1.6vw,20px);">Rp {{ number_format($pendapatanHariIni, 0, ',', '.') }}</div>
+                <div class="metric-sub"><i class="fa-solid fa-arrow-trend-up up"></i><span class="up">Pembayaran lunas</span></div>
             </div>
         </div>
     </div>
@@ -110,7 +99,7 @@
                                         <td class="ps-4 text-muted fw-semibold">{{ $i + 1 }}</td>
                                         <td>
                                             <div class="d-flex align-items-center gap-2">
-                                                <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#2563eb,#06b6d4);display:grid;place-items:center;color:white;font-weight:700;font-size:13px;flex-shrink:0;">
+                                                <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#064e1f,#22c55e);display:grid;place-items:center;color:white;font-weight:700;font-size:13px;flex-shrink:0;">
                                                     {{ strtoupper(substr($rv->patient ? $rv->patient->nama : '?', 0, 1)) }}
                                                 </div>
                                                 <div>
@@ -168,14 +157,14 @@
                 <div class="card-body">
                     <div class="row g-2">
                         @foreach ([
-                            ['pelayanan.pendaftaran', 'user-plus',        'Pendaftaran',  'linear-gradient(135deg,#2563eb,#60a5fa)'],
-                            ['pelayanan.pemeriksaan', 'stethoscope',      'Pemeriksaan',  'linear-gradient(135deg,#059669,#34d399)'],
-                            ['pelayanan.odontogram',  'tooth',            'Odontogram',   'linear-gradient(135deg,#7c3aed,#c4b5fd)'],
-                            ['pelayanan.riwayat',     'clock-rotate-left','Rekam Medis',  'linear-gradient(135deg,#d97706,#fcd34d)'],
+                            ['pelayanan.pendaftaran', 'user-plus',        'Pendaftaran',  'linear-gradient(135deg,#064e1f,#15803d)'],
+                            ['pelayanan.pemeriksaan', 'stethoscope',      'Pemeriksaan',  'linear-gradient(135deg,#134e4a,#0f9488)'],
+                            ['pelayanan.odontogram',  'tooth',            'Odontogram',   'linear-gradient(135deg,#365314,#65a30d)'],
+                            ['pelayanan.riwayat',     'clock-rotate-left','Rekam Medis',  'linear-gradient(135deg,#065f46,#059669)'],
                         ] as [$route, $icon, $label, $grad])
                         <div class="col-6">
                             <a href="{{ route($route) }}" class="text-decoration-none">
-                                <div class="text-center p-3 rounded-3 border" style="transition:.15s;" onmouseover="this.style.borderColor='#2563eb';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''">
+                                <div class="text-center p-3 rounded-3 border" style="transition:.15s;" onmouseover="this.style.borderColor='#16a34a';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''">
                                     <div style="width:44px;height:44px;border-radius:12px;background:{{ $grad }};display:grid;place-items:center;margin:0 auto 10px;font-size:18px;color:white;">
                                         <i class="fa-solid fa-{{ $icon }}"></i>
                                     </div>

@@ -292,11 +292,11 @@
     }
     .tooth-box:hover {
         transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(37, 99, 235, 0.15) !important;
-        border-color: #2563eb;
+        box-shadow: 0 6px 12px rgba(22,163,74,0.15) !important;
+        border-color: #16a34a;
     }
     .tooth-btn:focus .tooth-box {
-        border: 2px solid #2563eb !important;
+        border: 2px solid #16a34a !important;
     }
 </style>
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Treatment;
 use App\Models\Visit;
@@ -210,6 +211,48 @@ class ReportController extends Controller
 
         return view('reports.treatments', compact(
             'records', 'treatmentSummary', 'startDate', 'endDate', 'kategori', 'categories'
+        ));
+    }
+
+    /**
+     * Laporan Pendapatan Dokter
+     */
+    public function doctors(Request $request)
+    {
+        $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
+        $endDate   = $request->input('end_date', now()->toDateString());
+
+        $doctors = Doctor::with(['visits' => function ($q) use ($startDate, $endDate) {
+            $q->whereBetween('tanggal_kunjungan', [$startDate, $endDate]);
+        }])->orderBy('nama')->get();
+
+        $doctorStats = $doctors->map(function ($doctor) {
+            $visits         = $doctor->visits;
+            $totalKunjungan = $visits->count();
+            $lunas          = $visits->where('status_pembayaran', 'Lunas');
+            $totalJasa      = $lunas->sum('jasa_dokter');
+            $totalPendapatan= $lunas->sum('total_biaya');
+            $pendapatanKlinik = $totalPendapatan - $totalJasa;
+
+            return [
+                'id'               => $doctor->id,
+                'nama'             => $doctor->nama,
+                'spesialisasi'     => $doctor->spesialisasi,
+                'jasa_per_kunjungan' => $doctor->jasa_dokter,
+                'total_kunjungan'  => $totalKunjungan,
+                'total_jasa'       => $totalJasa,
+                'total_pendapatan' => $totalPendapatan,
+                'pendapatan_klinik'=> $pendapatanKlinik,
+            ];
+        });
+
+        $grandTotalJasa     = $doctorStats->sum('total_jasa');
+        $grandTotalPendapatan = $doctorStats->sum('total_pendapatan');
+        $grandPendapatanKlinik = $doctorStats->sum('pendapatan_klinik');
+
+        return view('reports.doctors', compact(
+            'doctorStats', 'startDate', 'endDate',
+            'grandTotalJasa', 'grandTotalPendapatan', 'grandPendapatanKlinik'
         ));
     }
 

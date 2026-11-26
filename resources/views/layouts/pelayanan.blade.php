@@ -47,6 +47,12 @@
         Rekam Medis
     </a>
 
+    <a href="{{ route('pelayanan.dokter.index') }}"
+       class="{{ request()->routeIs('pelayanan.dokter*') ? 'active' : '' }}">
+        <span class="nav-icon"><i class="fa-solid fa-user-doctor"></i></span>
+        Dokter
+    </a>
+
     <div class="nav-caption" style="margin-top:8px;">Laporan & Analitik</div>
 
     @auth

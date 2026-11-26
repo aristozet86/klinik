@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\OdontogramController;
 use App\Http\Controllers\PatientController;
@@ -42,6 +43,14 @@ Route::prefix('pelayanan')->name('pelayanan.')->group(function () {
     Route::get('/riwayat', [MedicalRecordController::class, 'index'])->name('riwayat');
     Route::get('/riwayat/{patient}', [MedicalRecordController::class, 'show'])->name('riwayat.show');
 
+    // Manajemen Dokter
+    Route::get('/dokter', [DoctorController::class, 'index'])->name('dokter.index');
+    Route::get('/dokter/tambah', [DoctorController::class, 'create'])->name('dokter.create');
+    Route::post('/dokter', [DoctorController::class, 'store'])->name('dokter.store');
+    Route::get('/dokter/{dokter}/edit', [DoctorController::class, 'edit'])->name('dokter.edit');
+    Route::patch('/dokter/{dokter}', [DoctorController::class, 'update'])->name('dokter.update');
+    Route::delete('/dokter/{dokter}', [DoctorController::class, 'destroy'])->name('dokter.destroy');
+
     Route::get('/profil', [ProfileController::class, 'edit'])->name('profil');
     Route::patch('/profil', [ProfileController::class, 'update'])->name('profil.update');
     Route::delete('/profil', [ProfileController::class, 'destroy'])->name('profil.destroy');
@@ -63,6 +72,7 @@ Route::prefix('laporan')->name('laporan.')->group(function () {
         Route::get('/grafik', [ReportController::class, 'charts'])->name('grafik');
         Route::get('/keuangan', [ReportController::class, 'finance'])->name('keuangan');
         Route::get('/tindakan', [ReportController::class, 'treatments'])->name('tindakan');
+        Route::get('/dokter', [ReportController::class, 'doctors'])->name('dokter');
 
         Route::get('/profil', [ProfileController::class, 'edit'])->name('profil');
         Route::patch('/profil', [ProfileController::class, 'update'])->name('profil.update');

@@ -15,6 +15,7 @@ class Doctor extends Model
         'no_sip',
         'no_hp',
         'status',
+        'jasa_dokter',
     ];
 
     public function visits()

@@ -19,8 +19,8 @@
 
     <style>
         :root {
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
+            --primary-color: #16a34a;
+            --primary-hover: #15803d;
             --secondary-color: #0f172a;
             --accent-teal: #0d9488;
             --bg-page: #f8fafc;
@@ -159,23 +159,23 @@
         }
 
         .input-group-modern .btn-toggle-password:hover {
-            color: #2563eb;
-            background-color: #f1f5f9;
+            color: #16a34a;
+            background-color: #f0fdf4;
         }
 
         .input-group-modern:focus-within .input-group-text,
         .input-group-modern:focus-within .form-control,
         .input-group-modern:focus-within .btn-toggle-password {
-            border-color: #2563eb;
+            border-color: #16a34a;
             background-color: #ffffff;
         }
 
         .input-group-modern:focus-within .input-group-text {
-            color: #2563eb;
+            color: #16a34a;
         }
 
         .input-group-modern:focus-within {
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+            box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.12);
             border-radius: 12px;
         }
 
@@ -185,7 +185,7 @@
         }
 
         .btn-auth-primary {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: linear-gradient(135deg, #16a34a, #15803d);
             border: none;
             color: #ffffff;
             font-weight: 700;
@@ -201,8 +201,7 @@
             gap: 8px;
         }
 
-        .btn-auth-primary:hover {
-            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+        .btn-auth-primary:hover { background: linear-gradient(135deg, #15803d, #064e1f); box-shadow: 0 12px 22px -4px rgba(22,163,74,.45); }
             transform: translateY(-1px);
             box-shadow: 0 12px 22px -4px rgba(37, 99, 235, 0.5);
             color: #ffffff;
@@ -232,10 +231,7 @@
             font-weight: 600;
         }
 
-        .demo-badge-btn:hover {
-            background: #2563eb;
-            color: #ffffff;
-        }
+        .demo-badge-btn:hover { background: #16a34a; color: #ffffff; }
 
         .auth-footer-text {
             color: #64748b;

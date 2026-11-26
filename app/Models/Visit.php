@@ -12,6 +12,7 @@ class Visit extends Model
     protected $fillable = [
         'no_antrean',
         'patient_id',
+        'doctor_id',
         'poli',
         'tanggal_kunjungan',
         'jam_kunjungan',
@@ -27,6 +28,7 @@ class Visit extends Model
         'biaya_konsultasi',
         'biaya_tindakan',
         'biaya_obat',
+        'jasa_dokter',
         'total_biaya',
         'status_pembayaran',
         'metode_pembayaran',
@@ -41,6 +43,11 @@ class Visit extends Model
         return $this->belongsTo(Patient::class);
     }
 
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class);
+    }
+
     public function visitTreatments()
     {
         return $this->hasMany(VisitTreatment::class);
@@ -49,5 +56,11 @@ class Visit extends Model
     public function odontograms()
     {
         return $this->hasMany(Odontogram::class);
+    }
+
+    // Pendapatan klinik = total_biaya - jasa_dokter
+    public function getPendapatanKlinikAttribute(): int
+    {
+        return $this->total_biaya - $this->jasa_dokter;
     }
 }

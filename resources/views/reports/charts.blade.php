@@ -127,12 +127,12 @@
                 datasets: [{
                     label: 'Jumlah Kunjungan',
                     data: {{ Illuminate\Support\Js::from($dailyTrend) }},
-                    borderColor: '#2563eb',
+                    borderColor: '#16a34a',
                     borderWidth: 3,
                     backgroundColor: dailyGradient,
                     fill: true,
                     tension: 0.35,
-                    pointBackgroundColor: '#2563eb',
+                    pointBackgroundColor: '#16a34a',
                     pointRadius: 4,
                 }]
             },
@@ -177,7 +177,7 @@
                 labels: Object.keys(poliData),
                 datasets: [{
                     data: Object.values(poliData),
-                    backgroundColor: ['#2563eb', '#0d9488', '#f59e0b', '#8b5cf6'],
+                    backgroundColor: ['#16a34a', '#0f9488', '#65a30d', '#059669'],
                     borderWidth: 2,
                     borderColor: '#ffffff',
                 }]

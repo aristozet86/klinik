@@ -41,4 +41,10 @@
         <span class="nav-icon"><i class="fa-solid fa-clipboard-check"></i></span>
         Laporan Tindakan
     </a>
+
+    <a href="{{ route('laporan.dokter') }}"
+       class="{{ request()->routeIs('laporan.dokter') ? 'active' : '' }}">
+        <span class="nav-icon"><i class="fa-solid fa-user-doctor"></i></span>
+        Pendapatan Dokter
+    </a>
 @endsection
